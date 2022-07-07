@@ -1,5 +1,7 @@
+const { response } = require('express')
 const express = require('express')
 const { restart } = require('nodemon')
+const morgan = require('morgan')
 
 const app = express()
 app.use(express.json())
@@ -26,6 +28,12 @@ let persons = [
     "number": "39-23-6423122"
   }
 ]
+
+morgan.token('data', (req, res) => {
+  return JSON.stringify(req.body)
+})
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
 app.get('/', (request, response) => {
   response.send('<h1>Welcome to Phonebook</h1')
