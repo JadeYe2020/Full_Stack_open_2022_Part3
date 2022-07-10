@@ -58,14 +58,10 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const person = persons.find(p => p.id === id)
-
-  if (person) {
+  Person.findById(req.params.id).then(person => {
     res.json(person)
-  } else {
-    res.status(404).end()
-  }
+  })
+    .catch(err => console.log("error", err.message))
 })
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -86,20 +82,16 @@ app.post('/api/persons', (req, res) => {
     return res.status(400).json({
       error: "Number is missing"
     })
-  } else if (persons.find(p => p.name.toLowerCase() === body.name.toLowerCase())) {
-    return res.status(400).json({
-      error: "name must be unique"
-    })
   }
 
-  const person = {
+  const person = new Person( {
     name: body.name,
-    number: body.number || '',
-    id: Math.floor(Math.random()*40 + 10)
-  }
+    number: body.number || ''
+  })
 
-  persons = persons.concat(person)
-  res.json(person)
+  person.save().then(savedPerson => {
+    res.json(savedPerson)
+  })
 })
 
 const PORT = process.env.PORT
