@@ -83,28 +83,28 @@ app.delete('/api/persons/:id', (req, res, next) => {
 app.post('/api/persons', (req, res, next) => {
   const body = req.body
 
-  if (Person.find({ name: body.name })) {
-    return res.status(400).send({ error: 'Invalid entry. The same name is already in the phonebook.'})
-  }
+  Person.find({ name: body.name }).exec()
+    .then(result => {
+      console.log("result: ", result)
+      if (result.length > 0) {
+        return res.status(400).send({ error: 'Invalid entry. The same name is already in the phonebook.'})
+      }
 
-  const person = new Person( {
-    name: body.name,
-    number: body.number
-  })
-
-  person.save().then(savedPerson => {
-    res.json(savedPerson)
-  })
+      const person = new Person( {
+        name: body.name,
+        number: body.number
+      })
+    
+      person.save().then(savedPerson => {
+        res.json(savedPerson)
+      })
+        .catch(error => next(error))
+    })
     .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
   const { name, number } = req.body
-
-  // const person = {
-  //   name: body.name,
-  //   number: body.number
-  // }
 
   Person.findByIdAndUpdate(req.params.id, 
     { name, number }, 
