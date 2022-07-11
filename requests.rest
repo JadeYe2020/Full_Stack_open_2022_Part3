@@ -19,3 +19,12 @@ content-Type: application/json
   "name": "the Fifth person",
   "number": "56778"
 }
+
+###
+POST https://obscure-springs-54225.herokuapp.com/api/persons/
+content-Type: application/json
+
+{
+  "name": "Ada Lovelace",
+  "number": "040-22334454"
+}

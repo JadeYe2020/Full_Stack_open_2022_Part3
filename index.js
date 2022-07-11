@@ -85,7 +85,6 @@ app.post('/api/persons', (req, res, next) => {
 
   Person.find({ name: body.name }).exec()
     .then(result => {
-      console.log("result: ", result)
       if (result.length > 0) {
         return res.status(400).send({ error: 'Invalid entry. The same name is already in the phonebook.'})
       }
