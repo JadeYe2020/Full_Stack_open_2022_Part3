@@ -7,3 +7,15 @@ content-Type: application/json
   "name": "New GUY 3",
   "number": "555"
 }
+
+###
+DELETE http://localhost:3001/api/persons/62cad075e97f65c9b739395c
+
+###
+PUT http://localhost:3001/api/persons/62cb7098a315725e52d09fbc
+content-Type: application/json
+
+{
+  "name": "the Fifth person",
+  "number": "56778"
+}
