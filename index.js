@@ -11,29 +11,6 @@ app.use(express.json())
 app.use(cors())
 app.use(express.static('build'))
 
-// let persons = [
-//   { 
-//     "id": 1,
-//     "name": "Arto Hellas", 
-//     "number": "040-123456"
-//   },
-//   { 
-//     "id": 2,
-//     "name": "Ada Lovelace", 
-//     "number": "39-44-5323523"
-//   },
-//   { 
-//     "id": 3,
-//     "name": "Dan Abramov", 
-//     "number": "12-43-234345"
-//   },
-//   { 
-//     "id": 4,
-//     "name": "Mary Poppendieck", 
-//     "number": "39-23-6423122"
-//   }
-// ]
-
 morgan.token('data', (req, res) => {
   return JSON.stringify(req.body)
 })
@@ -86,14 +63,14 @@ app.post('/api/persons', (req, res, next) => {
   Person.find({ name: body.name }).exec()
     .then(result => {
       if (result.length > 0) {
-        return res.status(400).send({ error: 'Invalid entry. The same name is already in the phonebook.'})
+        return res.status(400).send({ error: 'Invalid entry. The same name is already in the phonebook.' })
       }
 
       const person = new Person( {
         name: body.name,
         number: body.number
       })
-    
+
       person.save().then(savedPerson => {
         res.json(savedPerson)
       })
@@ -105,11 +82,11 @@ app.post('/api/persons', (req, res, next) => {
 app.put('/api/persons/:id', (req, res, next) => {
   const { name, number } = req.body
 
-  Person.findByIdAndUpdate(req.params.id, 
-    { name, number }, 
+  Person.findByIdAndUpdate(req.params.id,
+    { name, number },
     { new: true, runValidators: true, context: 'query' }
   )
-    .then(updatedPerson =>{
+    .then(updatedPerson => {
       res.json(updatedPerson)
     })
     .catch(error => next(error))
@@ -135,6 +112,7 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(errorHandler)
 
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT
 app.listen(PORT)
-console.log(`Server running on port ${PORT}`);
+console.log(`Server running on port ${PORT}`)
